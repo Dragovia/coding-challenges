@@ -1,53 +1,56 @@
-#include <bits/stdc++.h>
 #include <iostream>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-///creating a node
-class Node {
-public:
-    int value;
-    Node* next;
 
-};
 
-int main(){
 
-    Node* head;
-    Node* one = NULL;
-    Node* two = NULL;
-    Node* three = NULL;
+void selectionSort(int arr[], int n)
+{
+    int i, j, min_idx;
 
-    ///allocate 3 nodes into the heap
+    // One by one move boundary of
+    // unsorted subarray
+    for (i = 0; i < n - 1; i++) {
+      ///0 to the last element in array forloop
+        // Find the minimum element in
+        // unsorted array
+        min_idx = i; /// mid is the first element
+        for (j = i + 1; j < n; j++) {
+                ///second element to the end
+            if (arr[j] < arr[min_idx])
+            /// if the element on the right is smaller
+            ///than the element on the left
+                min_idx = j;
+           /// then the index on the right becomes the new min index
+        }
 
-    one = new Node();
-    two = new Node();
-    three = new Node();
-
-    ///Assign value values
-    one -> value = 1;
-    two -> value = 2;
-    three -> value = 3;
-
-    ///connect nodes
-
-    one->next = two;
-    two->next = three;
-    three->next = NULL;
-
-    ///
-    head = one;
-
-    while(head!= NULL){
-    //    cout << head->value;
-        head = head->next;
+        // Swap the found minimum element
+        // with the first element
+        if (min_idx != i) ///min_indx isn't
+            swap(arr[min_idx], arr[i]);
     }
-        cout << "one " << one -> value <<" " << &one;
-        cout <<endl;
-    cout << "two " << two -> value <<" " << &two;
-    cout <<endl;
-        cout << "three " << three -> value <<" " << &three;
+}
 
+// Function to print an array
+void printArray(int arr[], int size)
+{
+    int i;
+    for (i = 0; i < size; i++) {
+        cout << arr[i] << " ";
+        cout << endl;
+    }
+}
 
+// Driver program
+int main()
+{
+    int arr[] = { 64, 25, 12, 22, 11 };
+    int n = sizeof(arr) / sizeof(arr[0]);
 
+    // Function Call
+    selectionSort(arr, n);
+    cout << "Sorted array: \n";
+    printArray(arr, n);
+    return 0;
 }
