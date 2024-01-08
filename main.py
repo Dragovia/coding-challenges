@@ -1,78 +1,91 @@
-# This is a sample Python script.
+import discord
+import asyncio
+import os
+import glob
+import random
+from discord.ext import commands
+#from dotenv import load_dotenv
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+# from discord_slash import SlashCommand
 
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-def fib(n):
-    if n == 1 or n == 2:
-        result = 1
-    else:
-        result = fib(n-1) + fib(n-2)
-    return result
-
-def fib_2(n,memo):
-    if memo[n] is not None:
-        return memo[n]
-    if n == 1 or n == 2:
-        result = 1
-    else:
-        result = fib_2(n-1,memo) + fib_2(n-2,memo)
-    memo[n] = result
-    return result
-
-def fib_memo(n):
-    memo = [None] * (n + 1)
-    return fib_2(n,memo)
-#-------------------------------------------------
-def fib_bottom_up(n):
-    if n == 1 or n == 2:
-        return 1
-    bottom_up = [None] * (n+1)
-    bottom_up[1] = 1
-    bottom_up[2] = 1
-    for i in range(3, n+1):
-        bottom_up[i] = bottom_up[i-1] + bottom_up[i-2]
-    return bottom_up[n]
-
-##def factorial(n):
-    #if n < 0:
-     #   return -1
-   # elif n == 0:
-     #   return 1
-    #else:
-       ## return n * factorial(n-1)
-
-#def permutation(str):
-   # permutation(str,"")
-
-#def permutation(str,prefix):
-   # if str.len() == 0:
-      #  print(prefix)
-   # else:
-       # for x in str.length():
-         #   rem = str[0:x] + str[x+1]
-           # permutation(rem, prefix + str[x])
-
-def TwoStones (names):
-    if (names % 2) == 0:
-        return("Bob")
-    else:
-        return("Alice")
+client = commands.Bot(command_prefix=';;')
 
 
+@client.event
+async def on_ready():
+    print('Bot is ready')
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-    #print(fib(50))
-    #print(fib_memo(50))
-   # print(fib_bottom_up(1000))
-   #print(factorial(3))
-   # print(permutation("dog","o"))
-    num = int(input(""))
-    print(TwoStones(num))
+
+@client.command()
+async def ping(ctx):
+    await ctx.send(f' Pong!{round(client.latency * 1000)}ms')
+
+
+@client.command(aliases=['8ball', 'test'])
+async def _8ball(ctx, *, question):
+    responses = ['It is certain', 'its is deciely so', 'without a doubt',
+                 'yes',
+                 'you may rely on it',
+                 'as i see it, yes',
+                 'most likely',
+                 'outlook good',
+                 'yes',
+                 'signs point to yes',
+                 'repl hazy try again',
+                 'ask again later',
+                 'better not tell you now',
+                 'cannot predict now',
+                 'concerntrate and ask again',
+                 'dont cout oon it',
+                 'my reply is no',
+                 'my soucrs say no',
+                 'outlook not so good',
+                 'very doubtful']
+    await ctx.send(f'Question:{question}\nAnswer:{random.choice(responses)}')
+
+
+@client.command()
+async def Pet(ctx, *, question):
+    responses = [' Why yes she is his pet. He is a cutie and he can do anything he wants to to her. <3']
+    await ctx.send(f'Answer:{random.choice(responses)}')
+
+
+@client.command()
+async def love(ctx):
+    percentage = (random.randint(0, 100))
+    await ctx.send(f'Uwu I love my master {percentage} %  of the time <3!')
+
+
+@client.command(aliases=['cowgirl', 'cow', 'kinky'])
+async def _cowgif(ctx):
+    await ctx.send("")
+
+
+async def background_loop():
+    await client.wait_until_ready()
+    while not client.is_closed():
+        channel = await client.get_channel(713867808907198494)
+        messages = ["Hello!", "How are you doing?", "Howdy!"]
+        await channel.send(random.choice(messages))
+        print("ran")
+        await asyncio.sleep(5)
+
+
+# @client.event
+# async def on_message(message):
+#  lst = ['mad','angry','sad','salty','lolhemad']
+#  channe_id = client.get_channel(713867808907198494)
+# if message.content.startswith('!') :
+#   await channe_id.send(random.choice(lst))"""
+
+client.run('')
+
+
+
+
+
+
+
+
+
+
