@@ -1,25 +1,25 @@
-from flask import *
-import json, time
-
-app = Flask(__name__)
-
-@app.route('/', methods =['GET'])
-def home_page():
-    data_set = {'Page': 'Home', 'Message': 'Successfully loaded the Home page', 'Timestamp': time.time()}
-    json_dump = json.dumps(data_set)
-
-    return json_dump
-
-@app.route('/user/', methods = ['GET'])
-def request_page():
-    user_query = str(request.args.get('user'))
-
-    data_set = {'Page' : 'Requests', 'Message': f'Successfully got the request for {user_query}', 'Timestamp':
-    time.time()}
-    json_dump = json.dumps(data_set)
-
-    return json_dump
-
-
-if __name__=='__main__':
-    app.run(port =7777)
+class Solution(object):
+   def longestCommonPrefix(self, strs):
+      """
+      :type strs: List[str]
+      :rtype: str
+      """
+      if len(strs) == 0:
+         return ""
+      current = strs[0]
+      #print(current)
+      for i in range(1,len(strs)): # position 1 to length of strs
+         temp = ""  #temp is empty
+         if len(current) == 0:  #if the is no word in current break
+            break
+         for j in range(len(strs[i])):  # for the range of the length of words
+            if j<len(current) and current[j] == strs[i][j]:
+               print( strs[i][j])
+               temp+=current[j]
+            else:
+               break
+         current = temp
+      return current
+input_list = ["dog","racecar","car"]#["school","schedule","scotland"]
+ob1 = Solution()
+print(ob1.longestCommonPrefix(input_list))
