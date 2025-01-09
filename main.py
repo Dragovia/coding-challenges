@@ -1,25 +1,35 @@
-class Solution(object):
-   def longestCommonPrefix(self, strs):
-      """
-      :type strs: List[str]
-      :rtype: str
-      """
-      if len(strs) == 0:
-         return ""
-      current = strs[0]
-      #print(current)
-      for i in range(1,len(strs)): # position 1 to length of strs
-         temp = ""  #temp is empty
-         if len(current) == 0:  #if the is no word in current break
-            break
-         for j in range(len(strs[i])):  # for the range of the length of words
-            if j<len(current) and current[j] == strs[i][j]:
-               print( strs[i][j])
-               temp+=current[j]
-            else:
-               break
-         current = temp
-      return current
-input_list = ["dog","racecar","car"]#["school","schedule","scotland"]
-ob1 = Solution()
-print(ob1.longestCommonPrefix(input_list))
+import tkinter as tk
+from PIL import Image, ImageTk
+
+
+def overlay_image(image_path):
+    """Overlays the image at the specified path on top of all windows."""
+    root = tk.Tk()
+    root.attributes('-fullscreen', True)
+    root.attributes('-topmost', True)
+    root.attributes('-alpha', 0.01)  # Make the window almost transparent
+
+    # Load the image
+    image = Image.open(image_path)
+    image_width, image_height = image.size
+    screen_width = root.winfo_screenwidth()
+    screen_height = root.winfo_screenheight()
+
+    # Center the image on the screen
+    image_x = (screen_width - image_width) // 2
+    image_y = (screen_height - image_height) // 2
+
+    # Create a label to display the image
+    photo = ImageTk.PhotoImage(image)
+    label = tk.Label(root, image=photo, bg='black')
+    label.place(x=image_x, y=image_y)
+
+    # Remove the window border and make it transparent
+    root.overrideredirect(True)
+    root.attributes('-alpha', 0.8)  # Adjust the alpha for the image visibility
+
+    root.mainloop()
+
+
+# Example usage:
+overlay_image("crosshair.png")
