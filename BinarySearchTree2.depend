@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1727934753 source:d:\data structures\binarysearchtree2\main.cpp
+	<iostream>
+	<stack>
+
