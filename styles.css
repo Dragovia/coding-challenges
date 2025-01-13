@@ -1,0 +1,204 @@
+::-webkit-scrollbar {
+  width: 20px;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 15px grey; 
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(139, 3, 3); 
+  border-radius: 10px;
+  border:rgb(243, 82, 82, 0.3) 3px solid;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #b30000; 
+}
+
+body {
+  color:rgb(243, 82, 82);
+  color:yellow;
+  font-family: 'georgia', serif;
+  font-weight:bold;
+  /*background-size:100% 100%;
+  background:url('sci\ fi\ planet\ 11.jpg');
+  background-size:cover;*/
+}
+
+#headline {
+  text-align:center;
+  color:yellow;
+  text-shadow:black 1px 1px, black 1px -1px, black -1px 1px, black -1px -1px;
+}
+
+.birthday {
+  width:50vw;
+  height:50px;
+  letter-spacing:1px;
+  display:flex;
+  background:black;
+  font-size:20px;
+  align-items:center;
+  text-shadow:black 1px 1px, black 1px -1px, black -1px 1px, black -1px -1px, gold 2px 2px 25px, gold 2px -2px 25px, gold -2px 2px 25px, gold -2px -2px 25px;
+  border:gold groove 3px;
+  border-radius:10px;
+  margin:auto;
+  margin-bottom:10px;
+}
+
+.type1 {
+  display:inline;
+  width:55%;
+  margin-left:2.5vw;
+}
+
+
+.type2 {
+  display:inline;
+  width:20%;
+}
+
+.type3 {
+  display:inline;
+  width:45%;
+  margin-left:10%;
+}
+
+#background {
+  position: fixed;
+  object-fit:cover;
+  height:100vh;
+  width:100vw;
+  left:0;
+  right: 0;
+  top:0;
+  bottom: 0;
+  /*min-width: 100%;
+  min-height: 100%;
+  background-size:contain;*/
+  z-index:-1;
+  animation: zoom 60s infinite alternate;
+  -webkit-animation: zoom 60s infinite alternate;
+}
+
+@keyframes zoom {
+  0% {
+  transform:scale(1);
+  }
+  100% {
+   transform:scale(2);
+  }
+} 
+
+.itsyourbirthday {
+  animation: celebration 1s ease-in-out;
+  animation-iteration-count:infinite;
+}
+
+
+@keyframes celebration {
+  0% {
+    box-shadow: 0px 0px 5px 2px rgba(223,0,0,1);
+  } 
+  15% {
+    box-shadow: 0px 0px 5px 2px rgba(223,0,0,1), 0px 0px 5px 4px rgba(214,91,0,1);
+  }
+  30% {
+    box-shadow: 0px 0px 5px 2px rgba(223,0,0,1), 0px 0px 5px 4px rgba(214,91,0,1), 0px 0px 5px 6px rgba(233,245,0,1);
+  }
+  45% {
+    box-shadow: 0px 0px 5px 2px rgba(223,0,0,1), 0px 0px 5px 4px rgba(214,91,0,1), 0px 0px 5px 6px rgba(233,245,0,1), 0px 0px 5px 8px rgba(23,255,17,1);
+  }
+  60% {
+    box-shadow: 0px 0px 5px 2px rgba(223,0,0,1), 0px 0px 5px 4px rgba(214,91,0,1), 0px 0px 5px 6px rgba(233,245,0,1), 0px 0px 5px 8px rgba(23,255,17,1), 0px 0px 5px 10px rgba(29,255,255,1);
+  }
+  75% {
+    box-shadow: 0px 0px 5px 2px rgba(223,0,0,1), 0px 0px 5px 4px rgba(214,91,0,1), 0px 0px 5px 6px rgba(233,245,0,1), 0px 0px 5px 8px rgba(23,255,17,1), 0px 0px 5px 10px rgba(29,255,255,1), 0px 0px 5px 12px rgba(5,17,255,1);
+  }
+  90% {
+    box-shadow: 0px 0px 5px 2px rgba(223,0,0,1), 0px 0px 5px 4px rgba(214,91,0,1), 0px 0px 5px 6px rgba(233,245,0,1), 0px 0px 5px 8px rgba(23,255,17,1), 0px 0px 5px 10px rgba(29,255,255,1), 0px 0px 5px 12px rgba(5,17,255,1), 0px 0px 5px 14px rgba(202,0,253,1);
+  }
+}
+
+.birthdaysoon {
+  animation: approaching 5s;
+  border:green 3px solid;
+  box-shadow: 0px 0px 7px 7px greenyellow; 
+  filter:brightness(1.5);
+}
+
+.birthdaypast {
+  animation: belated 5s;
+  border:blue 3px solid;
+  box-shadow: 0px 0px 7px 7px purple; 
+  filter:brightness(1.5);
+}
+
+button {
+  background-color: #e92e3d;
+  border: none;
+  outline: none;
+  display:inline;
+  position:fixed;
+  top:5px;
+  left:5px;
+  color: rgb(211,211,211);
+  color:gold;
+  text-shadow:black 1px 1px, black 1px -1px, black -1px 1px, black -1px -1px;
+  padding: 15px 0;
+  width: 15%;
+  font-weight:bold;
+  letter-spacing: 1px;
+  border-radius: 5px;
+  transition:1s;
+}
+
+button:hover {
+  filter:brightness(1.2);
+  transform:scale(110%);
+}
+
+@media only screen and (max-width: 900px) {
+  .birthday {
+    font-size:18px;
+    width:60vw;
+  }
+  .type {
+    margin-left:1.5vw;
+  }
+
+  .type2 {
+    margin-left:1.5vw;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  .birthday {
+    font-size:16px;
+    width:70vw;
+  }
+
+  .type {
+    margin-left:1vw;
+  }
+
+  .type2 {
+    margin-left:1vw;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .birthday {
+    font-size:14px;
+    width:80vw;
+  }
+  .type {
+    margin-left:0.5vw;
+  }
+
+  .type2 {
+    margin-left:0.5vw;
+  }
+}
