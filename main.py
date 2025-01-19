@@ -1,13 +1,13 @@
-import re
-def has_non_alpha_char(city_name):
-  """Detects if a city_name includes characters outside of the a-z and A-Z ranges."""
-  if re.search(r'[^a-zA-Z]', city_name):
-    return True
-  else:
+def contains_non_alpha(city_name):
+    for char in city_name:
+        if not char.isalpha():
+            return True
     return False
-# Example usage
-city_name = "San José"
-if has_non_alpha_char(city_name):
-  print("The city name contains a non-alphabetical character.")
+
+
+# Test
+city_name = "New York2"
+if contains_non_alpha(city_name):
+    print(f"'{city_name}' contains characters outside the range A-Z and a-z.")
 else:
-  print("The city name contains only alphabetical characters.")
+    print(f"'{city_name}' only contains characters in the range A-Z and a-z.")
