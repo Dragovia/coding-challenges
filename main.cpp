@@ -1,107 +1,76 @@
+
+#include <immintrin.h>
 #include <iostream>
-#include <stack>
+#include <vector>
+#include <iomanip>
 
-using namespace std;
-
-struct Node {
-    int data;
-    Node* left;
-    Node* right;
-
-    Node(int value) : data(value), left(nullptr), right(nullptr) {}
-};
-
-class BST {
+class AVX512Multiplier {
 public:
-    Node* root;
+    // Constructor
+    AVX512Multiplier() {}
 
-    BST() : root(nullptr) {}
-
-    void insert(int data) {
-        Node* newNode = new Node(data);
-        if (root == nullptr) {
-            root = newNode;
-            return;
+    // Function to perform SIMD multiplication
+    std::vector<__int128> simdMultiply(const std::vector<uint64_t>& a, const std::vector<uint64_t>& b) {
+        if (a.size() != 4 || b.size() != 4) {
+            throw std::invalid_argument("Input vectors must have exactly 4 elements.");
         }
 
-        Node* current = root;
-        Node* parent = nullptr;
+        // Load 64-bit integers into 512-bit registers
+        __m512i va = _mm512_set_epi64(a[3], a[2], a[1], a[0], 0, 0, 0, 0);
+        __m512i vb = _mm512_set_epi64(b[3], b[2], b[1], b[0], 0, 0, 0, 0);
 
-        while (current != nullptr) {
-            parent = current;
-            if (data < current->data) {
-                current = current->left;
-            } else {
-                current = current->right;
-            }
-        }
+        // Perform 64-bit multiplication on the lower parts
+        __m512i low_result = _mm512_mul_epu32(va, vb);  // Multiply even-indexed elements of the vectors
 
-        if (data < parent->data) {
-            parent->left = newNode;
-        } else {
-            parent->right = newNode;
-        }
-    }
+        // Perform 64-bit multiplication on the higher parts
+        __m512i high_result = _mm512_mul_epu32(_mm512_srli_epi64(va, 32), _mm512_srli_epi64(vb, 32));  // Multiply odd-indexed elements
 
-    void inorder() {
-        if (root == nullptr) return;
+        // Store the results back into a vector
+        std::vector<__int128> result(4);
 
-        stack<Node*> s;
-        Node* current = root;
+        // Extract results from the SIMD registers
+        result[0] = (static_cast<__int128>(_mm512_extract_epi64(low_result, 0)) << 64) | _mm512_extract_epi64(low_result, 1);
+        result[1] = (static_cast<__int128>(_mm512_extract_epi64(low_result, 2)) << 64) | _mm512_extract_epi64(low_result, 3);
+        result[2] = (static_cast<__int128>(_mm512_extract_epi64(low_result, 4)) << 64) | _mm512_extract_epi64(low_result, 5);
+        result[3] = (static_cast<__int128>(_mm512_extract_epi64(low_result, 6)) << 64) | _mm512_extract_epi64(low_result, 7);
 
-        while (current != nullptr || !s.empty()) {
-            while (current != nullptr) {
-                s.push(current);
-                current = current->left;
-            }
-
-            current = s.top();
-            s.pop();
-
-            cout << current->data << " ";
-
-            current = current->right;
-        }
-    }
-
-    Node* search(int key) {
-        Node* current = root;
-
-        while (current != nullptr && current->data != key) {
-            if (key < current->data) {
-                current = current->left;
-            } else {
-                current = current->right;
-            }
-        }
-
-        return current;  // Will be nullptr if key not found
+        return result;
     }
 };
 
 int main() {
-    BST tree;
+    // Test vectors
+    std::vector<uint64_t> a = { 0x123456789ABCDEF0, 0xFEDCBA9876543210, 0x1111111111111111, 0x2222222222222222 };
+    std::vector<uint64_t> b = { 0x0000000000000001, 0x0000000000000002, 0x0000000000000003, 0x0000000000000004 };
 
-    tree.insert(50);
-    tree.insert(30);
-    tree.insert(70);
-    tree.insert(20);
-    tree.insert(40);
-    tree.insert(60);
-    tree.insert(80);
+    // Expected results
+    std::vector<__int128> expected_results = {
+        0x123456789ABCDEF0,
+        0x1FDB97530ECA86420,
+        0x3333333333333333,
+        0x8888888888888888
+    };
 
-    cout << "Inorder traversal: ";
-    tree.inorder();
-    cout << endl;
+    // Create the AVX-512 multiplier
+    AVX512Multiplier multiplier;
 
-    int key = 40;
-    Node* found = tree.search(key);
-    if (found != nullptr) {
-        cout << "Node with value " << key << " found in the tree." << endl;
+    // Perform SIMD multiplication
+    std::vector<__int128> results = multiplier.simdMultiply(a, b);
+
+    // Print intermediate and final results
+    bool pass = true;
+    for (size_t i = 0; i < results.size(); i++) {
+        std::cout << "Result " << i + 1 << ": 0x" << std::hex << results[i] << std::endl;
+        if (results[i] != expected_results[i]) {
+            pass = false;
+        }
+    }
+
+    if (pass) {
+        std::cout << "Test passed!" << std::endl;
     } else {
-        cout << "Node with value " << key << " not found in the tree." << endl;
+        std::cout << "Test failed!" << std::endl;
     }
 
     return 0;
 }
-
