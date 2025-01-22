@@ -1,35 +1,28 @@
-import tkinter as tk
-from PIL import Image, ImageTk
+import pandas as pd
+import yaml
+
+# Load the Excel file with multiple header rows and multiple indices
+file_path = 'input.xlsx'
+df = pd.read_excel(file_path, header=[0, 1], index_col=[0, 1])  # Adjust headers and index levels as needed
 
 
-def overlay_image(image_path):
-    """Overlays the image at the specified path on top of all windows."""
-    root = tk.Tk()
-    root.attributes('-fullscreen', True)
-    root.attributes('-topmost', True)
-    root.attributes('-alpha', 0.01)  # Make the window almost transparent
-
-    # Load the image
-    image = Image.open(image_path)
-    image_width, image_height = image.size
-    screen_width = root.winfo_screenwidth()
-    screen_height = root.winfo_screenheight()
-
-    # Center the image on the screen
-    image_x = (screen_width - image_width) // 2
-    image_y = (screen_height - image_height) // 2
-
-    # Create a label to display the image
-    photo = ImageTk.PhotoImage(image)
-    label = tk.Label(root, image=photo, bg='black')
-    label.place(x=image_x, y=image_y)
-
-    # Remove the window border and make it transparent
-    root.overrideredirect(True)
-    root.attributes('-alpha', 0.8)  # Adjust the alpha for the image visibility
-
-    root.mainloop()
+# Convert DataFrame to a nested dictionary structure
+def df_to_nested_dict(df):
+    nested_dict = {}
+    for index, row in df.iterrows():
+        d = nested_dict
+        for level in index[:-1]:  # Handle multi-level index
+            d = d.setdefault(level, {})
+        d[index[-1]] = row.dropna().to_dict()  # Exclude NaN values
+    return nested_dict
 
 
-# Example usage:
-overlay_image("crosshair.png")
+# Convert DataFrame to a dictionary
+data_dict = df_to_nested_dict(df)
+
+# Write the nested dictionary to a YAML file
+output_yaml_file = 'output.yaml'
+with open(output_yaml_file, 'w') as file:
+    yaml.dump(data_dict, file, sort_keys=False, default_flow_style=False)
+
+print(f"Data saved to {output_yaml_file}")
